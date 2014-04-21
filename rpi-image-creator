@@ -4,6 +4,21 @@ RASPBIAN_SHA1=9d0afbf932ec22e3c29d793693f58b0406bcab86
 INSTALL_PACKAGES=(
     is24-rpi-env
     is24-team-monitor
+    uzbl
+    matchbox-window-manager
+    chromium-browser
+    xdotool
+    fbi
+)
+
+REMOVE_PACKAGES=(
+    wolfram-engine
+    lxpolkit
+    desktop-base
+    lightdm
+    lxappearance
+    lxde-icon-theme
+    lxpanel
 )
 ADD_REPOS="
 deb http://debit/repo wheezy main
@@ -95,7 +110,7 @@ function _modify_image {
     #wget -q -O- http://ftp-master.debian.org/keys/archive-key-7.0.asc | gpg --no-permission-warning --no-default-keyring --keyring mnt/img_root/etc/apt/trusted.gpg --trustdb-name mnt/img_root/etc/apt/trustdb.gpg --import - || die "Could not add Debian security GPG keys"
     echo "Installing Updates and ${INSTALL_PACKAGES[@]}"
     chroot mnt/img_root apt-get -q update
-    chroot mnt/img_root apt-get -q -y purge wolfram-engine || die "Could not remove wolfram_engine"
+    chroot mnt/img_root apt-get -q -y purge ${REMOVE_PACKAGES[0]} || die "Could not purge packages"
     chroot mnt/img_root apt-get -qy dist-upgrade || die "Could not upgrade system"
     chroot mnt/img_root apt-get -qy install ${INSTALL_PACKAGES[@]} || die "Could not install ${INSTALL_PACKAGES[@]}"
 }
